@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>National Health Surveillance Portal</title>
+    <!-- Import Premium Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Modernized Clinical Background */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #f0f9ff 0%, #cffafe 100%); 
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            color: #1e293b;
+        }
+
+        /* Glassmorphism/Soft Card UI */
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(14, 165, 233, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            width: 100%;
+            max-width: 480px;
+            backdrop-filter: blur(10px);
+        }
+
+        h2 { 
+            color: #0f172a; 
+            text-align: center;
+            margin-top: 0;
+            font-weight: 700;
+            font-size: 24px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .form-group { margin-bottom: 22px; }
+        
+        label { 
+            font-weight: 600; 
+            display: block; 
+            margin-bottom: 8px; 
+            color: #334155; 
+            font-size: 14px;
+        }
+
+        /* Premium Inputs */
+        input[type="text"] { 
+            width: 100%; 
+            padding: 14px; 
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 15px;
+            background-color: #f8fafc;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #0ea5e9;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+        }
+
+        /* Grid for Address Fields */
+        .address-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 18px 0;
+            color: #94a3b8;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Tactile Symptom Pills */
+        .pill-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .symptom-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 16px;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            color: #475569;
+        }
+
+        .symptom-pill input {
+            display: none; /* Hide the actual checkbox square */
+        }
+
+        .symptom-pill:has(input:checked) {
+            background: #0ea5e9;
+            color: white;
+            border-color: #0284c7;
+            box-shadow: 0 4px 10px rgba(14, 165, 233, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .symptom-pill.none-pill:has(input:checked) {
+            background: #10b981;
+            border-color: #059669;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Upgraded Buttons */
+        button { 
+            padding: 16px 20px; 
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: white; 
+            border: none; 
+            border-radius: 12px;
+            cursor: pointer; 
+            width: 100%; 
+            font-size: 16px;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(2, 132, 199, 0.3);
+        }
+
+        button:hover { 
+            box-shadow: 0 6px 20px rgba(2, 132, 199, 0.4);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        #geo-btn {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
+            margin-top: 0;
+            padding: 12px 20px;
+        }
+        
+        #geo-btn:hover { 
+            box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4); 
+        }
+
+        #status { 
+            text-align: center; 
+            font-weight: 600; 
+            margin-top: 15px; 
+            color: #64748b; 
+            font-size: 14px;
+            min-height: 20px;
+        }
+
+        /* Animated AI Card */
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #ai-card { 
+            display: none; 
+            margin-top: 25px; 
+            padding: 25px; 
+            background-color: #f0fdf4; 
+            border-left: 6px solid #22c55e; 
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            animation: slideDown 0.4s ease-out;
+        }
+
+        .critical { 
+            background-color: #fef2f2 !important;
+            border-left-color: #ef4444 !important; 
+        }
+        
+        .warning {
+            background-color: #fffbeb !important;
+            border-left-color: #f59e0b !important;
+        }
+
+        #ai-card h3 { 
+            margin-top: 0; 
+            color: #15803d; 
+            font-size: 18px; 
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .critical h3 { color: #b91c1c !important; }
+        .warning h3 { color: #b45309 !important; }
+        
+        #ai-card p { 
+            margin: 10px 0; 
+            color: #334155; 
+            line-height: 1.6; 
+            font-size: 15px;
+        }
+        
+        strong { color: #0f172a; }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>🩺 National Health Portal</h2>
+
+        <div class="form-group">
+            <label>Patient Name (Optional):</label>
+            <input type="text" id="patient_name" placeholder="Enter Patient Name">
+        </div>
+
+        <div class="form-group">
+            <label>Location Tracker:</label>
+            <button type="button" id="geo-btn" onclick="getLocation()">📍 Detect My GPS Location</button>
+            <p id="geo-status" style="font-size: 13px; color: #64748b; margin-top: 8px; text-align: center;">Click to lock secure coordinates.</p>
+            
+            <div class="divider">Or Enter Manually</div>
+            
+            <div class="address-grid">
+                <input type="text" id="door_no" placeholder="Door / Flat No.">
+                <input type="text" id="street" placeholder="Street Name">
+                <input type="text" id="village" placeholder="Village / City">
+                <input type="text" id="pincode" placeholder="Pincode">
+            </div>
+        </div>        
+        
+        <div class="form-group">
+            <label>Clinical Symptoms:</label>
+            <div class="pill-group">
+                <label class="symptom-pill">
+                    <input type="checkbox" value="Fever" class="symp-check"> Fever
+                </label>
+                <label class="symptom-pill">
+                    <input type="checkbox" value="Cough" class="symp-check"> Cough
+                </label>
+                <label class="symptom-pill">
+                    <input type="checkbox" value="Rash" class="symp-check"> Rash
+                </label>
+                <label class="symptom-pill">
+                    <input type="checkbox" value="Fatigue" class="symp-check"> Fatigue
+                </label>
+                <label class="symptom-pill">
+                    <input type="checkbox" value="Headache" class="symp-check"> Headache
+                </label>
+                <label class="symptom-pill none-pill" id="no-symp-label">
+                    <input type="checkbox" value="None" id="no-symptoms"> ✅ Healthy (No Symptoms)
+                </label>
+            </div>
+        </div>
+
+        <button onclick="submitData()">Run AI Diagnostic & Log Data</button>
+        <p id="status"></p>
+
+        <!-- AI Diagnostic Card -->
+        <div id="ai-card">
+            <h3>⚡ Automated Triage Assessment</h3>
+            <p><strong>Seriousness:</strong> <span id="ai-serious"></span></p>
+            <p><strong>Recommended Action:</strong> <span id="ai-meds"></span></p>
+            <p><strong>Specialist to Visit:</strong> <span id="ai-doc"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // Interactive Pill Logic
+        document.getElementById('no-symptoms').addEventListener('change', function() {
+            if(this.checked) {
+                document.querySelectorAll('.symp-check').forEach(cb => cb.checked = false);
+            }
+        });
+
+        document.querySelectorAll('.symp-check').forEach(cb => {
+            cb.addEventListener('change', function() {
+                if(this.checked) document.getElementById('no-symptoms').checked = false;
+            });
+        });
+
+        // GPS Logic
+        let userLat = null;
+        let userLng = null;
+
+        function getLocation() {
+            const statusText = document.getElementById("geo-status");
+            statusText.innerText = "Connecting to GPS Satellite...";
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        userLat = position.coords.latitude;
+                        userLng = position.coords.longitude;
+                        statusText.innerText = `✅ GPS Locked: ${userLat.toFixed(4)}, ${userLng.toFixed(4)}`;
+                        
+                        // Change button visual state
+                        const geoBtn = document.getElementById("geo-btn");
+                        geoBtn.style.background = "linear-gradient(135deg, #10b981 0%, #059669 100%)";
+                        geoBtn.style.boxShadow = "0 4px 15px rgba(16, 185, 129, 0.3)";
+                        geoBtn.innerText = "📍 GPS Captured";
+                        
+                        // Clear manual inputs if GPS succeeds
+                        document.getElementById("door_no").value = "";
+                        document.getElementById("street").value = "";
+                        document.getElementById("village").value = "";
+                        document.getElementById("pincode").value = "";
+                    },
+                    (error) => {
+                        statusText.innerText = "❌ GPS Error: Please allow location access or enter manually.";
+                    }
+                );
+            } else {
+                statusText.innerText = "Geolocation is not supported. Please enter manually.";
+            }
+        }
+
+        // Submission Logic
+        async function submitData() {
+            document.getElementById("status").innerText = "Analyzing symptoms via Gemini 3.6 Flash...";
+            document.getElementById("ai-card").style.display = "none";
+            
+            const patient_name = document.getElementById("patient_name").value || "Anonymous";
+            
+            let symptoms = [];
+            document.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+                symptoms.push(cb.value);
+            });
+
+            if (symptoms.length === 0) {
+                alert("Please select at least one symptom, or select 'Healthy'.");
+                document.getElementById("status").innerText = "";
+                return;
+            }
+
+            let final_location = "";
+            
+            if (userLat !== null && userLng !== null) {
+                final_location = `${userLat},${userLng}`;
+            } else {
+                const door = document.getElementById("door_no").value.trim();
+                const street = document.getElementById("street").value.trim();
+                const village = document.getElementById("village").value.trim();
+                const pincode = document.getElementById("pincode").value.trim();
+                
+                if (!village || !pincode) {
+                    alert("Please either detect GPS or manually enter at least your Village/City and Pincode.");
+                    document.getElementById("status").innerText = "";
+                    return;
+                }
+                
+                let addressParts = [];
+                if (door) addressParts.push(door);
+                if (street) addressParts.push(street);
+                addressParts.push(village);
+                addressParts.push(pincode);
+                
+                final_location = addressParts.join(", ");
+            }
+
+            const payload = { 
+                roll_no: patient_name, 
+                location: final_location, 
+                symptoms: symptoms 
+            };
+
+            try {
+                const response = await fetch("https://symptoms-api-final-1047721621874.asia-south1.run.app", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                
+                if(result.status === "success") {
+                    document.getElementById("status").innerText = "Data securely logged and mapped.";
+                    
+                    document.getElementById("ai-card").style.display = "block";
+                    document.getElementById("ai-serious").innerText = result.ai_data.seriousness;
+                    document.getElementById("ai-meds").innerText = result.ai_data.medication;
+                    document.getElementById("ai-doc").innerText = result.ai_data.doctor;
+                    
+                    const severity = result.ai_data.seriousness;
+                    const aiCard = document.getElementById("ai-card");
+                    
+                    if(severity === "Serious" || severity === "Terribly Serious") {
+                        aiCard.className = "critical";
+                    } else if (severity === "Moderately Serious" || severity === "Nearly Safe") {
+                        aiCard.className = "warning";
+                    } else {
+                        aiCard.className = "";
+                    }
+                } else {
+                    document.getElementById("status").innerText = "Server returned an error.";
+                }
+            } catch (error) {
+                document.getElementById("status").innerText = "Connection Error: Please check the console.";
+                console.error("Fetch error:", error);
+            }
+        }
+    </script>
+</body>
+</html>
